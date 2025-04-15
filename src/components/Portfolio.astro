@@ -831,8 +831,8 @@ const { Content } = await portfolioEntry.render();
             'service_j5q6azh', // Service ID
             'template_gkt7fwu', // Template ID
             {
-              name: nameInput.value,
-              email: emailInput.value,
+              from_name: nameInput.value,
+              reply_to: emailInput.value,
               message: messageInput.value
             }
           );
