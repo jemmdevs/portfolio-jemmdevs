@@ -10,6 +10,13 @@ const { Content } = await portfolioEntry.render();
 
 <div class="page-container">
   <div class="parallax-stars"></div>
+  <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
   <div class="side-buttons">
     <a href="https://jemmdevs.vercel.app/" target="_blank" rel="noopener noreferrer" class="side-button">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -38,18 +45,6 @@ const { Content } = await portfolioEntry.render();
         <line x1="12" y1="15" x2="12" y2="3"></line>
       </svg>
       <span>Download CV</span>
-    </button>
-    <button id="color-theme" class="side-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <circle cx="12" cy="12" r="4"></circle>
-        <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
-        <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
-        <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
-        <line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line>
-        <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
-      </svg>
-      <span>Change Theme</span>
     </button>
   </div>
 
@@ -97,6 +92,9 @@ const { Content } = await portfolioEntry.render();
   .page-container {
     display: flex;
     width: 100%;
+    min-height: 100vh;
+    align-items: flex-start;
+    justify-content: center;
   }
 
   .side-buttons {
@@ -111,12 +109,74 @@ const { Content } = await portfolioEntry.render();
     z-index: 10;
   }
 
+  .mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    transition: transform 0.3s ease;
+    color: var(--text-color);
+  }
+  
+  .mobile-menu-toggle svg {
+    stroke: var(--text-color);
+  }
+  
+  .mobile-menu-toggle:hover {
+    transform: scale(1.05);
+  }
+  
+  .mobile-menu-toggle.active {
+    color: var(--accent-color);
+  }
+  
+  .dark .mobile-menu-toggle svg {
+    stroke: #fff;
+  }
+  
+  .light .mobile-menu-toggle svg {
+    stroke: #000;
+  }
+  
+  .theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .theme-toggle:hover {
+    transform: scale(1.05);
+  }
+
   .side-button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.7rem 1rem;
-    background-color: var(--bg-paper);
+    background-color: transparent;
     border: 1px solid var(--border-color);
     color: var(--text-color);
     border-radius: 0 4px 4px 0;
@@ -149,13 +209,14 @@ const { Content } = await portfolioEntry.render();
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 900px;
+    max-width: 860px;
     margin: 0 auto;
+    padding: 0 1rem;
   }
 
   .portfolio-container {
     width: 100%;
-    max-width: 700px;
+    max-width: 640px;
     margin: 0 auto;
     padding: 1.2rem 1.8rem;
     font-family: 'Courier New', Courier, monospace;
@@ -166,6 +227,7 @@ const { Content } = await portfolioEntry.render();
     border-radius: 0;
     font-size: 0.9rem;
     color: var(--text-color);
+    box-sizing: border-box;
   }
 
   .portfolio-content {
@@ -189,10 +251,10 @@ const { Content } = await portfolioEntry.render();
 
   .modal-content {
     background-color: var(--bg-paper);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 5px;
-    width: 90%;
-    max-width: 500px;
+    width: 95%;
+    max-width: 450px;
     color: var(--text-color);
     font-family: 'Courier New', Courier, monospace;
   }
@@ -242,7 +304,7 @@ const { Content } = await portfolioEntry.render();
   }
 
   .submit-button {
-    background-color: var(--bg-paper);
+    background-color: transparent;
     border: 1px solid var(--text-color);
     color: var(--text-color);
     padding: 0.5rem 1rem;
@@ -255,7 +317,7 @@ const { Content } = await portfolioEntry.render();
   }
 
   .submit-button:hover {
-    background-color: rgba(128, 128, 128, 0.2);
+    background-color: rgba(128, 128, 128, 0.1);
   }
 
   .form-status {
@@ -267,27 +329,57 @@ const { Content } = await portfolioEntry.render();
     transform: translateY(10px);
     height: 0;
     overflow: hidden;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
   }
 
   .form-status.active {
     opacity: 1;
     transform: translateY(0);
     height: auto;
-    padding: 0.8rem;
-    margin-top: 1rem;
-    border-radius: 4px;
+    padding: 1rem;
+    margin-top: 1.2rem;
+    pointer-events: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .success-message {
-    background-color: rgba(76, 175, 80, 0.1);
-    color: #4caf50;
-    border-left: 3px solid #4caf50;
+    background-color: rgba(76, 175, 80, 0.08);
+    color: var(--accent-color);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 4px;
   }
 
   .error-message {
-    background-color: rgba(244, 67, 54, 0.1);
+    background-color: rgba(244, 67, 54, 0.08);
     color: #f44336;
-    border-left: 3px solid #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    border-radius: 4px;
+  }
+
+  .status-icon {
+    display: inline-flex;
+    margin-right: 0.8rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status-icon svg {
+    stroke-width: 2;
+    width: 24px;
+    height: 24px;
+  }
+
+  .success-message .status-icon svg {
+    stroke: var(--accent-color);
+  }
+
+  .error-message .status-icon svg {
+    stroke: #f44336;
   }
 
   :global(.profile-header) {
@@ -411,37 +503,94 @@ const { Content } = await portfolioEntry.render();
   }
 
   @media (max-width: 768px) {
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    
     .page-container {
       flex-direction: column;
+      padding-top: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .outer-container {
+      width: 100%;
+      max-width: 520px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .mobile-menu-toggle {
+      display: flex;
     }
 
     .side-buttons {
-      position: static;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: auto;
       transform: none;
-      flex-direction: row;
-      justify-content: center;
-      padding: 1rem 0;
-      flex-wrap: wrap;
+      flex-direction: column;
+      background-color: var(--bg-paper);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border-color);
+      padding: 4rem 1rem 1rem;
+      z-index: 90;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
     }
-
+    
+    .side-buttons.active {
+      transform: translateY(0);
+    }
+    
+    .theme-toggle {
+      position: fixed !important;
+      top: 1rem !important;
+      right: 1rem !important;
+      z-index: 150 !important;
+    }
+    
     .side-button {
       border-radius: 4px;
       min-width: auto;
+      width: 100%;
     }
-
+    
     .side-button:hover {
-      transform: translateY(-5px);
+      transform: translateY(-3px);
     }
 
     .portfolio-container {
-      padding: 0.8rem;
-      margin: 0.5rem;
-      width: calc(100% - 1rem);
-      box-shadow: none;
-      border: none;
+      padding: 0.8rem 1.2rem;
+      margin: 0.5rem auto;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-color);
       font-size: 0.85rem;
+      box-sizing: border-box;
     }
     
+    .quote-container {
+      padding: 0.6rem 1rem;
+      margin: 0 auto 1rem auto;
+      max-width: 520px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     :global(h1) {
       font-size: 1.5rem;
     }
@@ -468,11 +617,6 @@ const { Content } = await portfolioEntry.render();
 
     :global(.github-link) {
       justify-content: center;
-    }
-
-    .quote-container {
-      padding: 0.6rem 1rem;
-      margin-bottom: 1rem;
     }
 
     .quote {
@@ -503,17 +647,6 @@ const { Content } = await portfolioEntry.render();
   :global(h2 + p), :global(h2 + ul), :global(h3 + p), :global(h3 + ul) {
     break-before: avoid;
     page-break-before: avoid;
-  }
-
-  .status-icon {
-    display: inline-flex;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-  }
-
-  .status-icon svg {
-    stroke-width: 2;
-    vertical-align: middle;
   }
 
   /* Theme transition animation */
@@ -556,7 +689,7 @@ const { Content } = await portfolioEntry.render();
   /* Programming quotes */
   .quote-container {
     width: 100%;
-    max-width: 700px;
+    max-width: 640px;
     margin: 0 auto 1.5rem;
     text-align: center;
     padding: 0.8rem 1.5rem;
@@ -568,6 +701,7 @@ const { Content } = await portfolioEntry.render();
     opacity: 0.9;
     transform: translateY(0);
     transition: transform 0.3s ease;
+    box-sizing: border-box;
   }
 
   .quote-container:hover {
@@ -632,103 +766,34 @@ const { Content } = await portfolioEntry.render();
     });
   };
 
-  // Color palettes - Harmonious combinations
-  const colorPalettes = [
-    // Default theme (Light)
-    {
-      bgPrimary: '#f5f5f5',
-      bgPaper: '#fff',
-      textColor: '#000',
-      borderColor: 'rgba(0, 0, 0, 0.1)',
-      shadowColor: 'rgba(0, 0, 0, 0.1)',
-      accentColor: '#4a6fa5'
-    },
-    // Default theme (Dark)
-    {
-      bgPrimary: '#111',
-      bgPaper: '#000',
-      textColor: '#fff',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      shadowColor: 'rgba(255, 255, 255, 0.05)',
-      accentColor: '#6d9feb'
-    },
-    // Blue theme
-    {
-      bgPrimary: '#e8f0f9',
-      bgPaper: '#ffffff',
-      textColor: '#2c3e50',
-      borderColor: 'rgba(44, 62, 80, 0.15)',
-      shadowColor: 'rgba(44, 62, 80, 0.1)',
-      accentColor: '#3498db'
-    },
-    // Green theme
-    {
-      bgPrimary: '#e8f9ef',
-      bgPaper: '#ffffff',
-      textColor: '#2c3e50',
-      borderColor: 'rgba(44, 62, 80, 0.15)',
-      shadowColor: 'rgba(44, 62, 80, 0.1)',
-      accentColor: '#2ecc71'
-    },
-    // Warm theme
-    {
-      bgPrimary: '#faf0e6',
-      bgPaper: '#ffffff',
-      textColor: '#34495e',
-      borderColor: 'rgba(52, 73, 94, 0.15)',
-      shadowColor: 'rgba(52, 73, 94, 0.1)',
-      accentColor: '#e67e22'
-    },
-    // Purple theme
-    {
-      bgPrimary: '#f4eefa',
-      bgPaper: '#ffffff',
-      textColor: '#2c3e50',
-      borderColor: 'rgba(44, 62, 80, 0.15)',
-      shadowColor: 'rgba(44, 62, 80, 0.1)',
-      accentColor: '#9b59b6'
-    },
-    // Teal theme
-    {
-      bgPrimary: '#e8f9f9',
-      bgPaper: '#ffffff',
-      textColor: '#2c3e50',
-      borderColor: 'rgba(44, 62, 80, 0.15)',
-      shadowColor: 'rgba(44, 62, 80, 0.1)',
-      accentColor: '#1abc9c'
-    },
-    // Red theme
-    {
-      bgPrimary: '#fdf2f2',
-      bgPaper: '#ffffff',
-      textColor: '#2c3e50',
-      borderColor: 'rgba(44, 62, 80, 0.15)',
-      shadowColor: 'rgba(44, 62, 80, 0.1)',
-      accentColor: '#e74c3c'
-    },
-    // Dark blue theme
-    {
-      bgPrimary: '#141e30',
-      bgPaper: '#243b55',
-      textColor: '#f5f5f5',
-      borderColor: 'rgba(245, 245, 245, 0.15)',
-      shadowColor: 'rgba(245, 245, 245, 0.05)',
-      accentColor: '#4da8da'
-    },
-    // Dark green theme
-    {
-      bgPrimary: '#1e352f',
-      bgPaper: '#335145',
-      textColor: '#f5f5f5',
-      borderColor: 'rgba(245, 245, 245, 0.15)',
-      shadowColor: 'rgba(245, 245, 245, 0.05)',
-      accentColor: '#a8d4ad'
-    }
-  ];
-
   document.addEventListener('DOMContentLoaded', async () => {
     // Cargar EmailJS
     await loadEmailJS();
+
+    // Mobile menu functionality
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const sideButtons = document.querySelector('.side-buttons');
+    
+    if (mobileMenuToggle && sideButtons) {
+      mobileMenuToggle.addEventListener('click', () => {
+        sideButtons.classList.toggle('active');
+        mobileMenuToggle.classList.toggle('active');
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const target = e.target as Node;
+        if (
+          !sideButtons.contains(target) && 
+          target !== mobileMenuToggle && 
+          !mobileMenuToggle.contains(target) &&
+          sideButtons.classList.contains('active')
+        ) {
+          sideButtons.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+        }
+      });
+    }
 
     // Funcionalidad de descarga de CV
     const downloadBtn = document.getElementById('download-pdf');
@@ -839,7 +904,7 @@ const { Content } = await portfolioEntry.render();
           
           // Crear mensaje de éxito con icono
           const successIcon = document.createElement('span');
-          successIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+          successIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
           successIcon.className = 'status-icon';
           
           const messageText = document.createElement('span');
@@ -850,26 +915,53 @@ const { Content } = await portfolioEntry.render();
           formStatus.appendChild(messageText);
           formStatus.classList.add('success-message', 'active');
           
+          // Efecto de animación en el icono
+          const iconSVG = successIcon.querySelector('svg');
+          if (iconSVG) {
+            iconSVG.style.transform = 'scale(0)';
+            iconSVG.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            
+            setTimeout(() => {
+              iconSVG.style.transform = 'scale(1)';
+            }, 10);
+          }
+          
           // Resetear formulario
           contactForm.reset();
           
           // Cerrar modal después de un tiempo
           setTimeout(() => {
             if (contactModal) {
-              contactModal.style.display = 'none';
+              // Agregar animación de desvanecimiento al modal
+              contactModal.style.opacity = '0';
+              contactModal.style.transition = 'opacity 0.5s ease';
+              
+              setTimeout(() => {
+                contactModal.style.display = 'none';
+                contactModal.style.opacity = '1';
+              }, 500);
             }
-            formStatus.classList.remove('active');
+            
+            // Desactivar el estado del formulario con animación
+            formStatus.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            formStatus.style.opacity = '0';
+            formStatus.style.transform = 'translateY(10px)';
+            
             setTimeout(() => {
-              formStatus.innerHTML = '';
-              formStatus.classList.remove('success-message');
+              formStatus.classList.remove('active');
+              setTimeout(() => {
+                formStatus.innerHTML = '';
+                formStatus.classList.remove('success-message');
+                formStatus.removeAttribute('style');
+              }, 300);
             }, 300);
-          }, 3000);
+          }, 2500);
         } catch (error) {
           console.error('Error sending email:', error);
           
           // Crear mensaje de error con icono
           const errorIcon = document.createElement('span');
-          errorIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+          errorIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
           errorIcon.className = 'status-icon';
           
           const messageText = document.createElement('span');
@@ -879,85 +971,23 @@ const { Content } = await portfolioEntry.render();
           formStatus.appendChild(errorIcon);
           formStatus.appendChild(messageText);
           formStatus.classList.add('error-message', 'active');
+          
+          // Efecto de animación en el icono
+          const iconSVG = errorIcon.querySelector('svg');
+          if (iconSVG) {
+            iconSVG.style.transform = 'scale(0)';
+            iconSVG.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            
+            setTimeout(() => {
+              iconSVG.style.transform = 'scale(1)';
+            }, 10);
+          }
         } finally {
           // Restaurar estado del botón
           submitBtn.textContent = originalBtnText;
           submitBtn.disabled = false;
         }
       });
-    }
-
-    // Color theme switcher functionality
-    const themeButton = document.getElementById('color-theme');
-    if (themeButton) {
-      // Keep track of current theme
-      let currentThemeIndex = localStorage.getItem('themeIndex') ? 
-        parseInt(localStorage.getItem('themeIndex') as string) : 
-        (document.documentElement.classList.contains('dark') ? 1 : 0); // Default light/dark
-
-      // Apply initial theme if one was saved
-      if (localStorage.getItem('themeIndex')) {
-        applyTheme(currentThemeIndex);
-      }
-
-      themeButton.addEventListener('click', () => {
-        // Get next theme index
-        currentThemeIndex = (currentThemeIndex + 1) % colorPalettes.length;
-        
-        // Save theme preference
-        localStorage.setItem('themeIndex', currentThemeIndex.toString());
-        
-        // Apply new theme
-        applyTheme(currentThemeIndex);
-        
-        // Add animation effect
-        document.documentElement.classList.add('theme-transition');
-        setTimeout(() => {
-          document.documentElement.classList.remove('theme-transition');
-        }, 1000);
-      });
-    }
-
-    function applyTheme(index: number) {
-      const palette = colorPalettes[index];
-      
-      // Apply theme colors to CSS variables
-      document.documentElement.style.setProperty('--bg-primary', palette.bgPrimary);
-      document.documentElement.style.setProperty('--bg-paper', palette.bgPaper);
-      document.documentElement.style.setProperty('--text-color', palette.textColor);
-      document.documentElement.style.setProperty('--border-color', palette.borderColor);
-      document.documentElement.style.setProperty('--shadow-color', palette.shadowColor);
-      document.documentElement.style.setProperty('--accent-color', palette.accentColor);
-      
-      // Update dark/light class based on text color brightness
-      const isDark = getBrightness(palette.textColor) > 180;
-      document.documentElement.classList.toggle('dark', isDark);
-      document.documentElement.classList.toggle('light', !isDark);
-      document.body.classList.toggle('dark', isDark);
-      document.body.classList.toggle('light', !isDark);
-    }
-
-    // Helper to calculate color brightness (0-255)
-    function getBrightness(color: string) {
-      // Handle hex colors
-      if (color.startsWith('#')) {
-        const hex = color.substring(1);
-        const r = parseInt(hex.substring(0, 2), 16);
-        const g = parseInt(hex.substring(2, 4), 16);
-        const b = parseInt(hex.substring(4, 6), 16);
-        return (r * 299 + g * 587 + b * 114) / 1000;
-      }
-      // Handle rgb/rgba colors
-      else if (color.startsWith('rgb')) {
-        const match = color.match(/(\d+),\s*(\d+),\s*(\d+)/);
-        if (match) {
-          const r = parseInt(match[1]);
-          const g = parseInt(match[2]);
-          const b = parseInt(match[3]);
-          return (r * 299 + g * 587 + b * 114) / 1000;
-        }
-      }
-      return 0;
     }
 
     // Initialize parallax effect

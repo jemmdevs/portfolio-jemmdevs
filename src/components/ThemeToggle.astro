@@ -61,19 +61,19 @@
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
   }
 
-  :global(.dark) .sun { display: none; }
-  :global(.dark) .moon { display: block; }
-  :global(.light) .sun { display: block; }
-  :global(.light) .moon { display: none; }
+  :global(.dark) .sun { display: block; }
+  :global(.dark) .moon { display: none; }
+  :global(.light) .sun { display: none; }
+  :global(.light) .moon { display: block; }
 
   @media (prefers-color-scheme: dark) {
-    .sun { display: none; }
-    .moon { display: block; }
+    .sun { display: block; }
+    .moon { display: none; }
   }
 
   @media (prefers-color-scheme: light) {
-    .sun { display: block; }
-    .moon { display: none; }
+    .sun { display: none; }
+    .moon { display: block; }
   }
 </style>
 
