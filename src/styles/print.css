@@ -1,0 +1,93 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 0.5cm;
+  }
+  
+  html, body {
+    width: 21cm;
+    height: 29.7cm;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body * {
+    visibility: hidden;
+  }
+  
+  .portfolio-container, .portfolio-container * {
+    visibility: visible;
+  }
+  
+  .portfolio-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100% !important;
+    padding: 1cm !important;
+    box-shadow: none !important;
+    border: none !important;
+    background-color: white !important;
+    color: black !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 10pt !important;
+    line-height: 1.3 !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .theme-toggle,
+  .side-buttons,
+  .actions,
+  .contact-modal {
+    display: none !important;
+  }
+
+  h1 {
+    font-size: 16pt !important;
+    margin-top: 0.5cm !important;
+    margin-bottom: 0.3cm !important;
+  }
+
+  h2 {
+    font-size: 13pt !important;
+    margin-top: 0.4cm !important;
+    margin-bottom: 0.2cm !important;
+  }
+
+  h3 {
+    font-size: 11pt !important;
+    margin-top: 0.3cm !important;
+    margin-bottom: 0.2cm !important;
+  }
+
+  p, ul, ol {
+    margin: 0.2cm 0 !important;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: black !important;
+  }
+
+  ul, ol {
+    page-break-before: avoid;
+    padding-left: 0.5cm !important;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  .profile-header {
+    margin-bottom: 0.5cm !important;
+  }
+
+  .profile-image img {
+    width: 2cm !important;
+    height: 2cm !important;
+  }
+} 

@@ -1,0 +1,1085 @@
+---
+import { getCollection } from 'astro:content';
+
+// Get the first entry from the portfolio collection
+const portfolioEntries = await getCollection('portfolio');
+const portfolioEntry = portfolioEntries[0]; // Get the first entry
+const { name, title, github } = portfolioEntry.data;
+const { Content } = await portfolioEntry.render();
+---
+
+<div class="page-container">
+  <div class="parallax-stars"></div>
+  <div class="side-buttons">
+    <a href="https://jemmdevs.vercel.app/" target="_blank" rel="noopener noreferrer" class="side-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+      <span>My Blog</span>
+    </a>
+    <button class="side-button" disabled>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 19 21 12 17 5 21 12 2"></polygon>
+      </svg>
+      <span>Projects</span>
+    </button>
+    <button class="side-button" id="contact-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+        <polyline points="22,6 12,13 2,6"></polyline>
+      </svg>
+      <span>Contact Me</span>
+    </button>
+    <button id="download-pdf" class="side-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      <span>Download CV</span>
+    </button>
+    <button id="color-theme" class="side-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="4"></circle>
+        <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+        <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+        <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+        <line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line>
+        <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+      </svg>
+      <span>Change Theme</span>
+    </button>
+  </div>
+
+  <div class="outer-container">
+    <div class="quote-container">
+      <blockquote id="quote-text" class="quote"></blockquote>
+      <p id="quote-author" class="quote-author"></p>
+    </div>
+    
+    <div class="portfolio-container">
+      <div class="portfolio-content">
+        <Content />
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para contacto -->
+  <div id="contact-modal" class="contact-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Contact Me</h2>
+        <button id="close-modal">&times;</button>
+      </div>
+      <form id="contact-form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="submit-button">Send Message</button>
+      </form>
+      <div id="form-status" class="form-status"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .page-container {
+    display: flex;
+    width: 100%;
+  }
+
+  .side-buttons {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 1rem;
+    padding: 1rem;
+    z-index: 10;
+  }
+
+  .side-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    background-color: var(--bg-paper);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
+  }
+
+  .side-button:hover {
+    transform: translateX(5px);
+    box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.15);
+  }
+
+  .side-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .side-button[disabled]:hover {
+    transform: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .outer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .portfolio-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1.2rem 1.8rem;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.3;
+    background-color: var(--bg-paper);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+  }
+
+  .portfolio-content {
+    margin-bottom: 1.2rem;
+    font-weight: 300;
+  }
+
+  /* Modal de contacto */
+  .contact-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background-color: var(--bg-paper);
+    padding: 2rem;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 500px;
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: none;
+  }
+
+  #close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-paper);
+    color: var(--text-color);
+    border-radius: 3px;
+  }
+
+  .submit-button {
+    background-color: var(--bg-paper);
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .submit-button:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+  }
+
+  .form-status {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    height: 0;
+    overflow: hidden;
+  }
+
+  .form-status.active {
+    opacity: 1;
+    transform: translateY(0);
+    height: auto;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+  }
+
+  .success-message {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+    border-left: 3px solid #4caf50;
+  }
+
+  .error-message {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    border-left: 3px solid #f44336;
+  }
+
+  :global(.profile-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.8rem;
+  }
+
+  :global(.profile-info) {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  :global(.profile-info h1) {
+    margin: 0;
+    font-size: 1.8rem;
+    border-bottom: none;
+    padding-bottom: 0;
+    font-weight: 600;
+  }
+
+  :global(.profile-info h2) {
+    margin: 0.2rem 0 0 0;
+    font-size: 1.1rem;
+    font-weight: normal;
+    border-bottom: none;
+    padding-bottom: 0;
+    opacity: 0.8;
+  }
+
+  :global(.contact-label) {
+    margin: 0.8rem 0 0.2rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    font-weight: 600;
+  }
+
+  :global(.github-link) {
+    display: inline-flex;
+    text-decoration: none;
+    color: var(--text-color);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+
+  :global(.github-link:hover) {
+    opacity: 1;
+  }
+
+  :global(.github-icon) {
+    transition: transform 0.2s ease;
+  }
+
+  :global(.github-link:hover .github-icon) {
+    transform: scale(1.1);
+  }
+
+  :global(.profile-image) {
+    flex-shrink: 0;
+  }
+
+  :global(.profile-image img) {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+  }
+
+  :global(h1, h2, h3) {
+    font-weight: 600;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.2rem;
+    margin-top: 1.1rem;
+    margin-bottom: 0.7rem;
+  }
+
+  :global(h1) {
+    font-size: 1.8rem;
+  }
+
+  :global(h2) {
+    font-size: 1.3rem;
+    margin-top: 1.1rem;
+  }
+
+  :global(h3) {
+    font-size: 1rem;
+    margin-top: 0.9rem;
+    opacity: 0.9;
+  }
+
+  :global(ul) {
+    list-style-type: square;
+    padding-left: 1.4rem;
+    margin: 0.7rem 0;
+    opacity: 0.9;
+  }
+
+  :global(li) {
+    margin-bottom: 0.25rem;
+  }
+
+  :global(p) {
+    margin: 0.7rem 0;
+    opacity: 0.9;
+  }
+
+  :global(strong) {
+    font-weight: 600;
+  }
+
+  :global(a) {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .page-container {
+      flex-direction: column;
+    }
+
+    .side-buttons {
+      position: static;
+      transform: none;
+      flex-direction: row;
+      justify-content: center;
+      padding: 1rem 0;
+      flex-wrap: wrap;
+    }
+
+    .side-button {
+      border-radius: 4px;
+      min-width: auto;
+    }
+
+    .side-button:hover {
+      transform: translateY(-5px);
+    }
+
+    .portfolio-container {
+      padding: 0.8rem;
+      margin: 0.5rem;
+      width: calc(100% - 1rem);
+      box-shadow: none;
+      border: none;
+      font-size: 0.85rem;
+    }
+    
+    :global(h1) {
+      font-size: 1.5rem;
+    }
+    
+    :global(h2) {
+      font-size: 1.1rem;
+    }
+
+    :global(.profile-header) {
+      flex-direction: column-reverse;
+      align-items: center;
+      text-align: center;
+    }
+
+    :global(.profile-image img) {
+      width: 80px;
+      height: 80px;
+    }
+
+    :global(.profile-info) {
+      width: 100%;
+      text-align: center;
+    }
+
+    :global(.github-link) {
+      justify-content: center;
+    }
+
+    .quote-container {
+      padding: 0.6rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .quote {
+      font-size: 0.8rem;
+    }
+
+    .quote-author {
+      font-size: 0.7rem;
+    }
+  }
+
+  :global(section) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0.8rem;
+  }
+
+  :global(.approach-section) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  :global(.prevent-break) {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  :global(h2 + p), :global(h2 + ul), :global(h3 + p), :global(h3 + ul) {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  .status-icon {
+    display: inline-flex;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .status-icon svg {
+    stroke-width: 2;
+    vertical-align: middle;
+  }
+
+  /* Theme transition animation */
+  :root {
+    --accent-color: #4a6fa5;
+  }
+
+  .dark {
+    --accent-color: #6d9feb;
+  }
+
+  .theme-transition {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .theme-transition * {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  /* Parallax effect */
+  .parallax-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .parallax-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    opacity: 0.5;
+  }
+
+  /* Programming quotes */
+  .quote-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    text-align: center;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--bg-paper);
+    border-left: 3px solid var(--accent-color);
+    border-right: 3px solid var(--accent-color);
+    box-shadow: 0 3px 5px var(--shadow-color);
+    font-style: italic;
+    opacity: 0.9;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .quote-container:hover {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+
+  .quote {
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+    position: relative;
+  }
+
+  .quote::before {
+    content: '"';
+    font-size: 1.5rem;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+    opacity: 0.7;
+    color: var(--accent-color);
+  }
+
+  .quote::after {
+    content: '"';
+    font-size: 1.5rem;
+    margin-left: 0.3rem;
+    vertical-align: middle;
+    opacity: 0.7;
+    color: var(--accent-color);
+  }
+
+  .quote-author {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    text-align: right;
+    margin: 0;
+  }
+
+  .quote-author::before {
+    content: '— ';
+  }
+</style>
+
+<script>
+  // Cargar EmailJS SDK
+  const loadEmailJS = () => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return new Promise((resolve) => {
+      script.onload = () => {
+        // @ts-ignore
+        if (window.emailjs) {
+          // @ts-ignore
+          window.emailjs.init('waONZgvG5drpYE06F'); // Public key
+          resolve(true);
+        }
+      };
+    });
+  };
+
+  // Color palettes - Harmonious combinations
+  const colorPalettes = [
+    // Default theme (Light)
+    {
+      bgPrimary: '#f5f5f5',
+      bgPaper: '#fff',
+      textColor: '#000',
+      borderColor: 'rgba(0, 0, 0, 0.1)',
+      shadowColor: 'rgba(0, 0, 0, 0.1)',
+      accentColor: '#4a6fa5'
+    },
+    // Default theme (Dark)
+    {
+      bgPrimary: '#111',
+      bgPaper: '#000',
+      textColor: '#fff',
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+      shadowColor: 'rgba(255, 255, 255, 0.05)',
+      accentColor: '#6d9feb'
+    },
+    // Blue theme
+    {
+      bgPrimary: '#e8f0f9',
+      bgPaper: '#ffffff',
+      textColor: '#2c3e50',
+      borderColor: 'rgba(44, 62, 80, 0.15)',
+      shadowColor: 'rgba(44, 62, 80, 0.1)',
+      accentColor: '#3498db'
+    },
+    // Green theme
+    {
+      bgPrimary: '#e8f9ef',
+      bgPaper: '#ffffff',
+      textColor: '#2c3e50',
+      borderColor: 'rgba(44, 62, 80, 0.15)',
+      shadowColor: 'rgba(44, 62, 80, 0.1)',
+      accentColor: '#2ecc71'
+    },
+    // Warm theme
+    {
+      bgPrimary: '#faf0e6',
+      bgPaper: '#ffffff',
+      textColor: '#34495e',
+      borderColor: 'rgba(52, 73, 94, 0.15)',
+      shadowColor: 'rgba(52, 73, 94, 0.1)',
+      accentColor: '#e67e22'
+    },
+    // Purple theme
+    {
+      bgPrimary: '#f4eefa',
+      bgPaper: '#ffffff',
+      textColor: '#2c3e50',
+      borderColor: 'rgba(44, 62, 80, 0.15)',
+      shadowColor: 'rgba(44, 62, 80, 0.1)',
+      accentColor: '#9b59b6'
+    },
+    // Teal theme
+    {
+      bgPrimary: '#e8f9f9',
+      bgPaper: '#ffffff',
+      textColor: '#2c3e50',
+      borderColor: 'rgba(44, 62, 80, 0.15)',
+      shadowColor: 'rgba(44, 62, 80, 0.1)',
+      accentColor: '#1abc9c'
+    },
+    // Red theme
+    {
+      bgPrimary: '#fdf2f2',
+      bgPaper: '#ffffff',
+      textColor: '#2c3e50',
+      borderColor: 'rgba(44, 62, 80, 0.15)',
+      shadowColor: 'rgba(44, 62, 80, 0.1)',
+      accentColor: '#e74c3c'
+    },
+    // Dark blue theme
+    {
+      bgPrimary: '#141e30',
+      bgPaper: '#243b55',
+      textColor: '#f5f5f5',
+      borderColor: 'rgba(245, 245, 245, 0.15)',
+      shadowColor: 'rgba(245, 245, 245, 0.05)',
+      accentColor: '#4da8da'
+    },
+    // Dark green theme
+    {
+      bgPrimary: '#1e352f',
+      bgPaper: '#335145',
+      textColor: '#f5f5f5',
+      borderColor: 'rgba(245, 245, 245, 0.15)',
+      shadowColor: 'rgba(245, 245, 245, 0.05)',
+      accentColor: '#a8d4ad'
+    }
+  ];
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Cargar EmailJS
+    await loadEmailJS();
+
+    // Funcionalidad de descarga de CV
+    const downloadBtn = document.getElementById('download-pdf');
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        // Crea una hoja de estilo específica para impresión
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.id = 'print-style';
+        style.innerHTML = `
+          @media print {
+            body * {
+              visibility: hidden;
+            }
+            .portfolio-container, .portfolio-container * {
+              visibility: visible;
+            }
+            .portfolio-container {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              box-shadow: none !important;
+              border: none !important;
+            }
+            @page {
+              size: A4;
+              margin: 1cm;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+        
+        // Imprimir y luego eliminar el estilo
+        window.print();
+        
+        // Eliminar el estilo después de imprimir
+        const printStyle = document.getElementById('print-style');
+        if (printStyle) {
+          document.head.removeChild(printStyle);
+        }
+      });
+    }
+
+    // Funcionalidad del modal de contacto
+    const contactBtn = document.getElementById('contact-button');
+    const contactModal = document.getElementById('contact-modal') as HTMLElement;
+    const closeModal = document.getElementById('close-modal');
+    const contactForm = document.getElementById('contact-form') as HTMLFormElement;
+    const formStatus = document.getElementById('form-status') as HTMLElement;
+
+    // Abrir modal
+    if (contactBtn && contactModal) {
+      contactBtn.addEventListener('click', () => {
+        contactModal.style.display = 'flex';
+      });
+    }
+
+    // Cerrar modal
+    if (closeModal && contactModal) {
+      closeModal.addEventListener('click', () => {
+        contactModal.style.display = 'none';
+      });
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.addEventListener('click', (e) => {
+      if (e.target === contactModal) {
+        contactModal.style.display = 'none';
+      }
+    });
+
+    // Enviar formulario con EmailJS
+    if (contactForm && formStatus) {
+      contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const nameInput = contactForm.querySelector('#name') as HTMLInputElement;
+        const emailInput = contactForm.querySelector('#email') as HTMLInputElement;
+        const messageInput = contactForm.querySelector('#message') as HTMLTextAreaElement;
+        const submitBtn = contactForm.querySelector('.submit-button') as HTMLButtonElement;
+        
+        if (!nameInput || !emailInput || !messageInput || !submitBtn) {
+          console.error('Missing form elements');
+          return;
+        }
+        
+        // Guardar texto original del botón
+        const originalBtnText = submitBtn.textContent || 'Send Message';
+        
+        // Actualizar UI para mostrar estado de envío
+        formStatus.textContent = '';
+        formStatus.classList.remove('error-message', 'success-message', 'active');
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+        
+        try {
+          // @ts-ignore
+          await window.emailjs.send(
+            'service_j5q6azh', // Service ID
+            'template_gkt7fwu', // Template ID
+            {
+              name: nameInput.value,
+              email: emailInput.value,
+              message: messageInput.value
+            }
+          );
+          
+          // Crear mensaje de éxito con icono
+          const successIcon = document.createElement('span');
+          successIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+          successIcon.className = 'status-icon';
+          
+          const messageText = document.createElement('span');
+          messageText.textContent = 'Message sent successfully';
+          
+          formStatus.innerHTML = '';
+          formStatus.appendChild(successIcon);
+          formStatus.appendChild(messageText);
+          formStatus.classList.add('success-message', 'active');
+          
+          // Resetear formulario
+          contactForm.reset();
+          
+          // Cerrar modal después de un tiempo
+          setTimeout(() => {
+            if (contactModal) {
+              contactModal.style.display = 'none';
+            }
+            formStatus.classList.remove('active');
+            setTimeout(() => {
+              formStatus.innerHTML = '';
+              formStatus.classList.remove('success-message');
+            }, 300);
+          }, 3000);
+        } catch (error) {
+          console.error('Error sending email:', error);
+          
+          // Crear mensaje de error con icono
+          const errorIcon = document.createElement('span');
+          errorIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+          errorIcon.className = 'status-icon';
+          
+          const messageText = document.createElement('span');
+          messageText.textContent = 'Failed to send message. Please try again.';
+          
+          formStatus.innerHTML = '';
+          formStatus.appendChild(errorIcon);
+          formStatus.appendChild(messageText);
+          formStatus.classList.add('error-message', 'active');
+        } finally {
+          // Restaurar estado del botón
+          submitBtn.textContent = originalBtnText;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+
+    // Color theme switcher functionality
+    const themeButton = document.getElementById('color-theme');
+    if (themeButton) {
+      // Keep track of current theme
+      let currentThemeIndex = localStorage.getItem('themeIndex') ? 
+        parseInt(localStorage.getItem('themeIndex') as string) : 
+        (document.documentElement.classList.contains('dark') ? 1 : 0); // Default light/dark
+
+      // Apply initial theme if one was saved
+      if (localStorage.getItem('themeIndex')) {
+        applyTheme(currentThemeIndex);
+      }
+
+      themeButton.addEventListener('click', () => {
+        // Get next theme index
+        currentThemeIndex = (currentThemeIndex + 1) % colorPalettes.length;
+        
+        // Save theme preference
+        localStorage.setItem('themeIndex', currentThemeIndex.toString());
+        
+        // Apply new theme
+        applyTheme(currentThemeIndex);
+        
+        // Add animation effect
+        document.documentElement.classList.add('theme-transition');
+        setTimeout(() => {
+          document.documentElement.classList.remove('theme-transition');
+        }, 1000);
+      });
+    }
+
+    function applyTheme(index: number) {
+      const palette = colorPalettes[index];
+      
+      // Apply theme colors to CSS variables
+      document.documentElement.style.setProperty('--bg-primary', palette.bgPrimary);
+      document.documentElement.style.setProperty('--bg-paper', palette.bgPaper);
+      document.documentElement.style.setProperty('--text-color', palette.textColor);
+      document.documentElement.style.setProperty('--border-color', palette.borderColor);
+      document.documentElement.style.setProperty('--shadow-color', palette.shadowColor);
+      document.documentElement.style.setProperty('--accent-color', palette.accentColor);
+      
+      // Update dark/light class based on text color brightness
+      const isDark = getBrightness(palette.textColor) > 180;
+      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.classList.toggle('light', !isDark);
+      document.body.classList.toggle('dark', isDark);
+      document.body.classList.toggle('light', !isDark);
+    }
+
+    // Helper to calculate color brightness (0-255)
+    function getBrightness(color: string) {
+      // Handle hex colors
+      if (color.startsWith('#')) {
+        const hex = color.substring(1);
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return (r * 299 + g * 587 + b * 114) / 1000;
+      }
+      // Handle rgb/rgba colors
+      else if (color.startsWith('rgb')) {
+        const match = color.match(/(\d+),\s*(\d+),\s*(\d+)/);
+        if (match) {
+          const r = parseInt(match[1]);
+          const g = parseInt(match[2]);
+          const b = parseInt(match[3]);
+          return (r * 299 + g * 587 + b * 114) / 1000;
+        }
+      }
+      return 0;
+    }
+
+    // Initialize parallax effect
+    initParallax();
+    
+    // Initialize random quote
+    initRandomQuote();
+  });
+
+  // Programming quotes
+  const programmingQuotes = [
+    {
+      text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+      author: "Martin Fowler"
+    },
+    {
+      text: "First, solve the problem. Then, write the code.",
+      author: "John Johnson"
+    },
+    {
+      text: "Experience is the name everyone gives to their mistakes.",
+      author: "Oscar Wilde"
+    },
+    {
+      text: "Programming isn't about what you know; it's about what you can figure out.",
+      author: "Chris Pine"
+    },
+    {
+      text: "The most important property of a program is whether it accomplishes the intention of its user.",
+      author: "C.A.R. Hoare"
+    },
+    {
+      text: "The best way to predict the future is to implement it.",
+      author: "David Heinemeier Hansson"
+    },
+    {
+      text: "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code.",
+      author: "Dan Salomon"
+    },
+    {
+      text: "Code is like humor. When you have to explain it, it's bad.",
+      author: "Cory House"
+    },
+    {
+      text: "Make it work, make it right, make it fast.",
+      author: "Kent Beck"
+    },
+    {
+      text: "Simplicity is the soul of efficiency.",
+      author: "Austin Freeman"
+    },
+    {
+      text: "The function of good software is to make the complex appear to be simple.",
+      author: "Grady Booch"
+    },
+    {
+      text: "It's not a bug – it's an undocumented feature.",
+      author: "Anonymous"
+    }
+  ];
+
+  // Parallax effect initialization
+  function initParallax() {
+    const starsContainer = document.querySelector('.parallax-stars');
+    
+    if (!starsContainer) return;
+    
+    // Create random stars
+    const numStars = 50;
+    
+    for (let i = 0; i < numStars; i++) {
+      const star = document.createElement('div');
+      star.className = 'parallax-star';
+      
+      // Random position
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      star.style.left = `${x}%`;
+      star.style.top = `${y}%`;
+      
+      // Random size
+      const size = Math.random() * 3 + 1;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      
+      // Random opacity
+      star.style.opacity = (Math.random() * 0.5 + 0.1).toString();
+      
+      // Add to DOM
+      starsContainer.appendChild(star);
+    }
+    
+    // Add parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      const stars = document.querySelectorAll('.parallax-star');
+      stars.forEach((star, index) => {
+        const speed = (index % 10) / 30 + 0.03;
+        const offsetX = (mouseX - 0.5) * speed * 100;
+        const offsetY = (mouseY - 0.5) * speed * 100;
+        
+        const starElement = star as HTMLElement;
+        starElement.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+    });
+  }
+  
+  // Random quote initialization
+  function initRandomQuote() {
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+    
+    if (!quoteText || !quoteAuthor) return;
+    
+    // Get a random quote
+    const randomIndex = Math.floor(Math.random() * programmingQuotes.length);
+    const quote = programmingQuotes[randomIndex];
+    
+    // Display the quote
+    quoteText.textContent = quote.text;
+    quoteAuthor.textContent = quote.author;
+  }
+</script> 

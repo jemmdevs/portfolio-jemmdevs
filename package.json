@@ -9,6 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.0"
+    "@astrojs/markdown-remark": "^4.3.0",
+    "@astrojs/mdx": "^4.2.4",
+    "astro": "^5.7.0",
+    "sharp": "^0.34.1"
   }
 }

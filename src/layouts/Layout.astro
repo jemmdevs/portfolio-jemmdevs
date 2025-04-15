@@ -1,3 +1,14 @@
+---
+import ThemeToggle from '../components/ThemeToggle.astro';
+import '../styles/print.css';
+
+interface Props {
+	title?: string;
+}
+
+const { title = "José Enrique Mateo - Full Stack Developer" } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -5,18 +16,114 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
+		
+		<style>
+			@media print {
+				.theme-toggle {
+					display: none;
+				}
+			}
+		</style>
 	</head>
 	<body>
-		<slot />
+		<div class="theme-toggle">
+			<ThemeToggle />
+		</div>
+		<main>
+			<slot />
+		</main>
 	</body>
 </html>
 
-<style>
+<style is:global>
+	:root {
+		--bg-primary: #f5f5f5;
+		--bg-paper: #fff;
+		--text-color: #000;
+		--border-color: rgba(0, 0, 0, 0.1);
+		--shadow-color: rgba(0, 0, 0, 0.1);
+	}
+
+	.dark {
+		--bg-primary: #111;
+		--bg-paper: #000;
+		--text-color: #fff;
+		--border-color: rgba(255, 255, 255, 0.1);
+		--shadow-color: rgba(255, 255, 255, 0.05);
+	}
+
 	html,
 	body {
 		margin: 0;
 		width: 100%;
 		height: 100%;
+		transition: background-color 0.3s ease, color 0.3s ease;
+	}
+	
+	body {
+		display: flex;
+		flex-direction: column;
+		padding: 0;
+		background-color: var(--bg-primary);
+		color: var(--text-color);
+	}
+	
+	main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		padding: 2rem 1rem;
+	}
+	
+	.theme-toggle {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		z-index: 100;
+	}
+	
+	@media print {
+		body {
+			background-color: white !important;
+			color: black !important;
+		}
+	}
+
+	@media (max-width: 600px) {
+		main {
+			padding: 1rem 0;
+		}
+	}
+
+	/* Ocultar la barra de herramientas de Astro */
+	.astro-dev-toolbar {
+		display: none !important;
 	}
 </style>
+
+<script>
+	// This script ensures the correct theme is applied before the page renders
+	const theme = (() => {
+		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+			return localStorage.getItem('theme') || 'light';
+		}
+		if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			return 'dark';
+		}
+		return 'light';
+	})();
+	
+	document.documentElement.classList.add(theme);
+	document.body.classList.add(theme);
+
+	// Hide Astro dev toolbar if it exists
+	document.addEventListener('DOMContentLoaded', () => {
+		const devToolbar = document.querySelector('.astro-dev-toolbar');
+		if (devToolbar) {
+			(devToolbar as HTMLElement).style.display = 'none';
+		}
+	});
+</script>
